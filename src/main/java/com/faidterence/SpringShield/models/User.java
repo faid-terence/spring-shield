@@ -1,6 +1,5 @@
 package com.faidterence.SpringShield.models;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,23 +33,24 @@ public class User implements UserDetails {
     @Column
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
+    @Column
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+           return List.of(new SimpleGrantedAuthority(role));
     }
 
+    // Implementing methods related to UserDetails interface
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     @Override
