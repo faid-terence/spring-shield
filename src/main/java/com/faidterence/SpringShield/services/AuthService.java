@@ -23,9 +23,19 @@ public class AuthService {
         user.setFullNames(registerRequest.getFullNames());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setRole(user.getRole());
+        user.setRole(registerRequest.getRole());
         user = userRepository.save(user);
         String token = jwtService.generateToken(user);
         return new AuthenticationResponse(user, token);
+    }
+
+    public AuthenticationResponse login(User loginRequest){
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+            String token = jwtService.generateToken(user);
+            return new AuthenticationResponse(user, token);
+        }
+        throw new RuntimeException("Invalid login credentials");
     }
 }
