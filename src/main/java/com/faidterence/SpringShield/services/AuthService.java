@@ -2,6 +2,7 @@ package com.faidterence.SpringShield.services;
 
 
 import com.faidterence.SpringShield.DTO.AuthenticationResponse;
+import com.faidterence.SpringShield.DTO.LoginResponse;
 import com.faidterence.SpringShield.models.User;
 import com.faidterence.SpringShield.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -29,12 +30,12 @@ public class AuthService {
         return new AuthenticationResponse(user, token);
     }
 
-    public AuthenticationResponse login(User loginRequest){
+    public LoginResponse login(User loginRequest){
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             String token = jwtService.generateToken(user);
-            return new AuthenticationResponse(user, token);
+           return new LoginResponse(token);
         }
         throw new RuntimeException("Invalid login credentials");
     }
