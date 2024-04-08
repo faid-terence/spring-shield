@@ -11,4 +11,9 @@ public class DemoController {
     public String demo(){
         return "Welcome to Spring Shield!";
     }
+
+    @GetMapping("api/v1/admin/demo")
+    public String adminDemo(){
+        return "Welcome to Spring Shield Admin!";
+    }
 }
