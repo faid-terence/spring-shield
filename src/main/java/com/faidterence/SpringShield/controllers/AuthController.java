@@ -2,6 +2,7 @@ package com.faidterence.SpringShield.controllers;
 
 
 import com.faidterence.SpringShield.DTO.AuthenticationResponse;
+import com.faidterence.SpringShield.DTO.LoginResponse;
 import com.faidterence.SpringShield.models.User;
 import com.faidterence.SpringShield.services.AuthService;
 import com.faidterence.SpringShield.services.UserService;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/api/v1/auth/login")
-    public ResponseEntity<AuthenticationResponse> login (@RequestBody User loginRequest){
+    public ResponseEntity<LoginResponse> login (@RequestBody User loginRequest){
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 }
