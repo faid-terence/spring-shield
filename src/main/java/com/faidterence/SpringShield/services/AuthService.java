@@ -29,8 +29,7 @@ public class AuthService {
             throw new RuntimeException("Email already exists");
         }
         user = userRepository.save(user);
-        String token = jwtService.generateToken(user);
-        return new AuthenticationResponse(user, token);
+        return new AuthenticationResponse(user);
     }
 
     public LoginResponse login(User loginRequest){

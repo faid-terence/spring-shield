@@ -9,17 +9,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 
 public class AuthenticationResponse {
 
-    private String authenticationToken;
 
     private User user;
 
-    public AuthenticationResponse(User user, String authenticationToken) {
+    public AuthenticationResponse(User user) {
         this.user = user;
-        this.authenticationToken = authenticationToken;
     }
 }
