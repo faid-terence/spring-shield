@@ -25,6 +25,9 @@ public class AuthService {
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setRole(registerRequest.getRole());
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new RuntimeException("Email already exists");
+        }
         user = userRepository.save(user);
         String token = jwtService.generateToken(user);
         return new AuthenticationResponse(user, token);
@@ -32,7 +35,7 @@ public class AuthService {
 
     public LoginResponse login(User loginRequest){
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Invalid login credentials"));
         if(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
             String token = jwtService.generateToken(user);
            return new LoginResponse(token);
