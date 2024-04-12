@@ -22,12 +22,8 @@ public class AuthController {
 
 
     @PostMapping("/api/v1/auth/register")
-    public ResponseEntity<?> registerUser(@RequestBody User registerRequest) {
-        if (userService.loadUserByEmail(registerRequest.getEmail()) != null) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-        AuthenticationResponse registeredUser = authService.register(registerRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
+    public ResponseEntity<Object> registerUser(@RequestBody User registerRequest) {
+        return authService.register(registerRequest);
     }
 
     @PostMapping("/api/v1/auth/login")
