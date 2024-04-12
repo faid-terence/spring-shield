@@ -6,6 +6,7 @@ import com.faidterence.SpringShield.DTO.LoginResponse;
 import com.faidterence.SpringShield.models.User;
 import com.faidterence.SpringShield.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +20,22 @@ public class AuthService {
 
 
 
-    public AuthenticationResponse register(User registerRequest){
+    public ResponseEntity<Object> register(User registerRequest) {
         User user = new User();
         user.setFullNames(registerRequest.getFullNames());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setRole(registerRequest.getRole());
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
-            throw new RuntimeException("Email already exists");
-        }
-        user = userRepository.save(user);
-        return new AuthenticationResponse(user);
-    }
 
+        // Check if email already exists
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+
+        // Save the user
+        user = userRepository.save(user);
+        return ResponseEntity.ok(new AuthenticationResponse(user).getUser());
+    }
     public LoginResponse login(User loginRequest){
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid login credentials"));
