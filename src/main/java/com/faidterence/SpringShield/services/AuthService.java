@@ -27,6 +27,13 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setRole(registerRequest.getRole());
 
+        if (user.getFullNames() == null || user.getEmail() == null || user.getPassword() == null) {
+            return ResponseEntity.badRequest().body("Please fill all fields");
+        }
+        if(user.getRole() == null){
+            user.setRole("USER");
+        }
+
         // Check if email already exists
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already exists");
